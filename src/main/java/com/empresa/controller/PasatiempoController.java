@@ -6,7 +6,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,17 +18,19 @@ import com.empresa.entidades.Pasatiempo;
 import com.empresa.entidades.UsuarioHasPasatiempo;
 import com.empresa.entidades.UsuarioHasPasatiempoPK;
 import com.empresa.service.UsuarioService;
+import com.empresa.util.AppSettings;
 
 @Controller
 @RequestMapping("/url/pasatiempo")
+@CrossOrigin(origins = AppSettings.URL_CROSS_ORIGIN)
 public class PasatiempoController {
 
     @Autowired
     private UsuarioService usuarioService;
 
     @ResponseBody
-    @GetMapping("/listaPasatiempoPorUsuario")
-    public List<Pasatiempo> listaPasatiempoPorUsuario(int idUsuario) {
+    @GetMapping("/listaPasatiempoPorUsuario/{id}")
+    public List<Pasatiempo> listaPasatiempoPorUsuario(@PathVariable("id") int idUsuario) {
         return usuarioService.traerPasatiempoDeUsuario(idUsuario);
     }
 
