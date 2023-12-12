@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -36,13 +37,11 @@ public class PasatiempoController {
 
     @ResponseBody
     @PostMapping("/registraPasatiempo")
-    public HashMap<String, Object> registro(
-            @RequestParam(name = "idUsuario", defaultValue = "-1", required = true) int idUsuario,
-            @RequestParam(name = "idPasatiempo", defaultValue = "-1", required = true) int idPasatiempo) {
+    public HashMap<String, Object> registro(@RequestBody UsuarioHasPasatiempoPK requestObject) {
         HashMap<String, Object> maps = new HashMap<String, Object>();
         UsuarioHasPasatiempoPK pk = new UsuarioHasPasatiempoPK();
-        pk.setIdPasatiempo(idPasatiempo);
-        pk.setIdUsuario(idUsuario);
+        pk.setIdPasatiempo(requestObject.getIdPasatiempo());
+        pk.setIdUsuario(requestObject.getIdUsuario());
 
         UsuarioHasPasatiempo obj = new UsuarioHasPasatiempo();
         obj.setUsuarioHasPasatiempoPK(pk);
@@ -58,7 +57,7 @@ public class PasatiempoController {
         } else {
             maps.put("mensaje", "Ya existe el pasatiempo");
         }
-        List<Pasatiempo> lstPasatiempo = usuarioService.traerPasatiempoDeUsuario(idUsuario);
+        List<Pasatiempo> lstPasatiempo = usuarioService.traerPasatiempoDeUsuario(requestObject.getIdUsuario());
         maps.put("lista", lstPasatiempo);
         return maps;
     }
